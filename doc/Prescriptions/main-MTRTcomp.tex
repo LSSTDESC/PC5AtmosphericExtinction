@@ -71,7 +71,11 @@ It must be noticed that every light interaction process may not be defined over 
 %---------------------------------
 We want to compare the air shower simulator over a wide range of airmass values. Thus we recommends to  simulate air-transparencies for  
 \todo[inline]{{\bf Airmass  :}  $z$ computed for 31 points in steps of 0.1~: $z \in [1,3]$.}
-
+Usually, simulation programs need the zenith angle $\theta_{z}$ as input parameter.
+Then we should use the simple relation between $\theta_{z}$ and $z$~:
+\begin{equation}
+z=\sec \theta_{z}=\frac{1}{\cos \theta_z}
+\end{equation}
 
 
 

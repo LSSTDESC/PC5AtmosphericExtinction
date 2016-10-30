@@ -44,3 +44,10 @@ git pull
 7) Send your modifications to the remote repository
 ----------------------------------------------------
 git push origin master
+
+
+To be able to push it may be necessary to provide an SSH Key to GitHub.
+
+The documentation is there:
+
+https://help.github.com/articles/generating-an-ssh-key/

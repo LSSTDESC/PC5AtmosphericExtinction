@@ -35,8 +35,8 @@ OZXX='oz'
 LSST_Altitude = 2.750  # in k meters
 OBS_Altitude = str(LSST_Altitude)
 
-TOPINPUTDIR='./input'
-TOPOUTPUTDIR='./output'
+TOPDIR='../simulations/RT/2.0/LS'
+
 
 
 ############################################################################
@@ -53,8 +53,8 @@ def ensure_dir(f):
 
 if __name__ == "__main__":
 
-    ensure_dir(TOPINPUTDIR)
-    ensure_dir(TOPOUTPUTDIR)
+    ensure_dir(TOPDIR)
+
 
 
     # No Ozone for a pure scattering atmosphere
@@ -130,10 +130,12 @@ if __name__ == "__main__":
         #    break
         atmkey=atmosphere_map[atmosphere]
        
-        
-        INPUTDIR=TOPINPUTDIR+'/'+atmosphere
+        # manage input and output directories
+        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmosphere+'/'+Proc
+        ensure_dir(TOPDIR2)
+        INPUTDIR=TOPDIR2+'/'+'input'
         ensure_dir(INPUTDIR)
-        OUTPUTDIR=TOPOUTPUTDIR+'/'+atmosphere
+        OUTPUTDIR=TOPDIR2+'/'+'output'
         ensure_dir(OUTPUTDIR)
     
     
@@ -151,7 +153,7 @@ if __name__ == "__main__":
            
         # 2) LOOP ON AIRMASSES 
         for index,amfileindex in np.ndenumerate(airmasses_indexes):
-            print index,amfileindex
+           
             
         
             # airmass

@@ -131,7 +131,7 @@ if __name__ == "__main__":
         atmkey=atmosphere_map[atmosphere]
        
         # manage input and output directories
-        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmosphere+'/'+Proc
+        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmkey+'/'+Proc
         ensure_dir(TOPDIR2)
         INPUTDIR=TOPDIR2+'/'+'in'
         ensure_dir(INPUTDIR)

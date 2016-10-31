@@ -21,7 +21,7 @@ libradtranpath = home+'MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/'
   
 Prog='RT'  #definition the simulation programm is libRadTran
 Obs='LS'   # definition of observatory site (LS,CT,OH,MK,...)
-Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
+Rte='ps'   # pp for parallel plane of ps for pseudo-spherical
 Atm=['us','sw']   # short name of atmospheric sky here US standard and  Subarctic winter
 Proc='sc'  # light interfaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special

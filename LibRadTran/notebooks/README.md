@@ -20,6 +20,7 @@ Provided by astropy package to have nice matplotlib images.
 View air transparencies for pure scattering sky:
 ----------------------------------------------
 - Show_RT_LS_pp_sc_rt.ipynb
+- Show_RT_LS_ps_sc_rt.ipynb
 
 
 

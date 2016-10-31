@@ -53,3 +53,7 @@ The documentation is there:
 https://help.github.com/articles/generating-an-ssh-key/
 I can push from my mac
 Try to push from my lab linux server !
+
+
+To generate an ssh key on your computer:
+https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/

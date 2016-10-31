@@ -133,9 +133,9 @@ if __name__ == "__main__":
         # manage input and output directories
         TOPDIR2=TOPDIR+'/'+Rte+'/'+atmosphere+'/'+Proc
         ensure_dir(TOPDIR2)
-        INPUTDIR=TOPDIR2+'/'+'input'
+        INPUTDIR=TOPDIR2+'/'+'in'
         ensure_dir(INPUTDIR)
-        OUTPUTDIR=TOPDIR2+'/'+'output'
+        OUTPUTDIR=TOPDIR2+'/'+'out'
         ensure_dir(OUTPUTDIR)
     
     

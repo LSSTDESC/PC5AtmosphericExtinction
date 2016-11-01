@@ -33,12 +33,12 @@ Prog='RT'  #definition the simulation programm is libRadTran
 Obs='LS'   # definition of observatory site (LS,CT,OH,MK,...)
 Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
 Atm=['us','sw']   # short name of atmospheric sky here US standard and  Subarctic winter
-Proc='ab'  # light interfaction processes : sc for pure scattering,ab for pure absorption
+Proc='ab'  # light interaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
 Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
-WVXX='wv'      # XX index for PWV z :   XX=int(10*z)
-OZXX='oz'
+WVXX='wv'      # XX index for PWV       :   XX=int(pwv*10)
+OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
 
 
 

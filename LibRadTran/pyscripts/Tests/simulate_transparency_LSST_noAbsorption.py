@@ -1,3 +1,14 @@
+################################################################
+#
+# Script to simulate air transparency with LibRadTran
+# With a pure scattering atmosphere
+#
+# author: sylvielsstfr
+# creation date : November 1st 2016
+# 
+#
+#################################################################
+
 import os
 import re
 import math
@@ -21,14 +32,14 @@ libradtranpath = home+'MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/'
   
 Prog='RT'  #definition the simulation programm is libRadTran
 Obs='LS'   # definition of observatory site (LS,CT,OH,MK,...)
-Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
+Rte='ps'   # pp for parallel plane of ps for pseudo-spherical
 Atm=['us','sw']   # short name of atmospheric sky here US standard and  Subarctic winter
-Proc='sc'  # light interfaction processes : sc for pure scattering,ab for pure absorption
+Proc='sc'  # light interaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
 Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
-WVXX='wv'      # XX index for PWV z :   XX=int(10*z)
-OZXX='oz'
+WVXX='wv'      # XX index for PWV       :   XX=int(pwv*10)
+OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
 
 
 
@@ -131,11 +142,11 @@ if __name__ == "__main__":
         atmkey=atmosphere_map[atmosphere]
        
         # manage input and output directories
-        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmosphere+'/'+Proc
+        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmkey+'/'+Proc
         ensure_dir(TOPDIR2)
-        INPUTDIR=TOPDIR2+'/'+'input'
+        INPUTDIR=TOPDIR2+'/'+'in'
         ensure_dir(INPUTDIR)
-        OUTPUTDIR=TOPDIR2+'/'+'output'
+        OUTPUTDIR=TOPDIR2+'/'+'out'
         ensure_dir(OUTPUTDIR)
     
     

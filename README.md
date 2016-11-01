@@ -5,6 +5,7 @@ Repository for SRM Key Project PC5 (Atmospheric Extinction)
 This is the repository for joint Modtran and LibRadTran air transparency
 simulations for DESC-LSST collaboration.
 
+The first goal is to proceed to 
 
 This repository is organised as follow:
 

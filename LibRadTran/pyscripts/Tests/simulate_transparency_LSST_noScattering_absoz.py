@@ -1,14 +1,13 @@
 ################################################################
 #
 # Script to simulate air transparency with LibRadTran
-# With a pure scattering atmosphere
+# With a pure absorbing atmosphere
 #
 # author: sylvielsstfr
 # creation date : November 1st 2016
 # 
 #
 #################################################################
-
 import os
 import re
 import math
@@ -32,21 +31,21 @@ libradtranpath = home+'MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/'
   
 Prog='RT'  #definition the simulation programm is libRadTran
 Obs='LS'   # definition of observatory site (LS,CT,OH,MK,...)
-Rte='ps'   # pp for parallel plane of ps for pseudo-spherical
+Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
 Atm=['us','sw']   # short name of atmospheric sky here US standard and  Subarctic winter
-Proc='sc'  # light interaction processes : sc for pure scattering,ab for pure absorption
+Proc='ab'  # light interfaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
 Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
-WVXX='wv'      # XX index for PWV       :   XX=int(pwv*10)
-OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
+WVXX='wv'      # XX index for PWV z :   XX=int(10*z)
+OZXX='oz'
 
 
 
-LSST_Altitude = 2.750  # in k meters
+LSST_Altitude = 2.750  # in k meters from astropy package (Cerro Pachon)
 OBS_Altitude = str(LSST_Altitude)
 
-TOPDIR='../simulations/RT/2.0/LS'
+TOPDIR='simulations/RT/2.0/LS'
 
 
 
@@ -74,6 +73,12 @@ if __name__ == "__main__":
     # airmass indexes defined for the whole production from z=1 to z=3
     airmasses_indexes=np.arange(10,31,1)
     
+
+    # ozone indexes defined for the whole production from 200 to 600 Dobson units
+    ozone_indexes=np.arange(20,61,2)
+
+    # PWV indexes defined for the whole production from 0 mm to 15 mm precipitable water
+    pwv_indexes=np.arange(0,155,5)
     
     # build the part 1 of filename
     BaseFilename_part1=Prog+'_'+Obs+'_'+Rte+'_'
@@ -141,8 +146,8 @@ if __name__ == "__main__":
         #    break
         atmkey=atmosphere_map[atmosphere]
        
-        # manage input and output directories
-        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmkey+'/'+Proc
+        # manage input and output directories and vary the ozone
+        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmkey+'/'+Proc+'/'+Mod+'/'+OZXX
         ensure_dir(TOPDIR2)
         INPUTDIR=TOPDIR2+'/'+'in'
         ensure_dir(INPUTDIR)
@@ -162,74 +167,80 @@ if __name__ == "__main__":
             else:
                 molresol ='fine'
            
-        # 2) LOOP ON AIRMASSES 
-        for index,amfileindex in np.ndenumerate(airmasses_indexes):
+        # 2) LOOP on OZONE
+        for index,ozfileindex in np.ndenumerate(ozone_indexes):   
            
-            
+           ozon_val=float(ozfileindex*10)
+           ozon_str='O3 '+str(ozon_val)+ ' DU'
+           
+           # 3) LOOP ON AIRMASSES 
+           for index,amfileindex in np.ndenumerate(airmasses_indexes):
+                    
         
-            # airmass
-            airmass=float(amfileindex)/10.
+                # airmass
+                airmass=float(amfileindex)/10.
             
-            print amfileindex
+                print amfileindex
             
-            BaseFilename=BaseFilename_part1+atmkey+'_'+Proc+'_'+Mod+'_z'+str(amfileindex)                   
+                BaseFilename=BaseFilename_part1+atmkey+'_'+Proc+'_'+Mod+'_z'+str(amfileindex)+'_'+OZXX+str(ozfileindex)                   
                     
-            verbose=True
-            uvspec = UVspec.UVspec()
-            uvspec.inp["data_files_path"]  =  libradtranpath+'data'
+                verbose=True
+                uvspec = UVspec.UVspec()
+                uvspec.inp["data_files_path"]  =  libradtranpath+'data'
                 
-            uvspec.inp["atmosphere_file"] = libradtranpath+'data/atmmod/'+atmosphere+'.dat'
-            uvspec.inp["albedo"]           = '0.2'
+                uvspec.inp["atmosphere_file"] = libradtranpath+'data/atmmod/'+atmosphere+'.dat'
+                uvspec.inp["albedo"]           = '0.2'
             
             
             
-            uvspec.inp["rte_solver"] = rte_eq
+                uvspec.inp["rte_solver"] = rte_eq
             
             
-            uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol 
+                uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol 
 
-            # Convert airmass into zenith angle 
-            am=airmass
-            sza=math.acos(1./am)*180./math.pi
+                # Convert airmass into zenith angle 
+                am=airmass
+                sza=math.acos(1./am)*180./math.pi
 
-            # Should be no_absorption
-            if runtype=='aerosol_default':
-                uvspec.inp["aerosol_default"] = ''
-            elif runtype=='aerosol_special':
-                uvspec.inp["aerosol_set_tau_at_wvl"] = '500 0.02'
+                # Should be no_absorption
+                if runtype=='aerosol_default':
+                    uvspec.inp["aerosol_default"] = ''
+                elif runtype=='aerosol_special':
+                    uvspec.inp["aerosol_set_tau_at_wvl"] = '500 0.02'
                         
-            if runtype=='no_scattering':
-                uvspec.inp["no_scattering"] = ''
-            if runtype=='no_absorption':
-                uvspec.inp["no_absorption"] = ''
-                uvspec.inp["aerosol_set_tau_at_wvl"] = '500 0.0'
-
+                if runtype=='no_scattering':
+                    uvspec.inp["no_scattering"] = ''
+                if runtype=='no_absorption':
+                    uvspec.inp["no_absorption"] = ''
+     
+                # set up the ozone value               
+                uvspec.inp["mol_modify"] = ozon_str 
                     
                 
-            uvspec.inp["output_user"] = 'lambda edir'
-            uvspec.inp["altitude"] = OBS_Altitude   # Altitude LSST observatory
-            uvspec.inp["source"] = 'solar '+libradtranpath+'data/solar_flux/kurudz_1.0nm.dat'
-            #uvspec.inp["source"] = 'solar '+libradtranpath+'data/solar_flux/kurudz_0.1nm.dat'
-            uvspec.inp["sza"]        = str(sza)
-            uvspec.inp["phi0"]       = '0'
-            uvspec.inp["wavelength"]       = '250.0 1200.0'
-            uvspec.inp["output_quantity"] = 'reflectivity' #'transmittance' #
-#           uvspec.inp["verbose"] = ''
-            uvspec.inp["quiet"] = ''
+                uvspec.inp["output_user"] = 'lambda edir'
+                uvspec.inp["altitude"] = OBS_Altitude   # Altitude LSST observatory
+                uvspec.inp["source"] = 'solar '+libradtranpath+'data/solar_flux/kurudz_1.0nm.dat'
+                #uvspec.inp["source"] = 'solar '+libradtranpath+'data/solar_flux/kurudz_0.1nm.dat'
+                uvspec.inp["sza"]        = str(sza)
+                uvspec.inp["phi0"]       = '0'
+                uvspec.inp["wavelength"]       = '250.0 1200.0'
+                uvspec.inp["output_quantity"] = 'reflectivity' #'transmittance' #
+#               uvspec.inp["verbose"] = ''
+                uvspec.inp["quiet"] = ''
 
   
 
-            if "output_quantity" in uvspec.inp.keys():
-                outtextfinal=outtext+'_'+uvspec.inp["output_quantity"]
+                if "output_quantity" in uvspec.inp.keys():
+                    outtextfinal=outtext+'_'+uvspec.inp["output_quantity"]
 
            
             
-            inputFilename=BaseFilename+'.INP'
-            outputFilename=BaseFilename+'.OUT'
-            inp=os.path.join(INPUTDIR,inputFilename)
-            out=os.path.join(OUTPUTDIR,outputFilename)
+                inputFilename=BaseFilename+'.INP'
+                outputFilename=BaseFilename+'.OUT'
+                inp=os.path.join(INPUTDIR,inputFilename)
+                out=os.path.join(OUTPUTDIR,outputFilename)
                     
             
-            uvspec.write_input(inp)
-            uvspec.run(inp,out,verbose,path=libradtranpath)
+                uvspec.write_input(inp)
+                uvspec.run(inp,out,verbose,path=libradtranpath)
 

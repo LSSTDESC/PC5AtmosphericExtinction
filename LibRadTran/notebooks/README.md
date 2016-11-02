@@ -24,6 +24,16 @@ View air transparencies for pure scattering sky:
 
 
 
+View air transparencies for pure absorbing sky:
+----------------------------------------------
+- vary ozone : simulate_transparency_LSST_noScattering_absoz.py
+- vary water vapor :simulate_transparency_LSST_noScattering_abspwv.py
+
+
+View air transparencies for scattering and absorbing sky:
+-------------------------------------------------
+- vary ozone : Show_RT_LS_pp_sa_rt_oz.ipynb
+
 
 
 Examples of two old notebooks to read LibRadTran output:

@@ -1,8 +1,32 @@
-pyscripts
+# pyscripts
 =========
 
 Set of python script for version python 2.7 used to handle the LibRandTran
 production.
 
-Old_pyscripts : directory containing the old version of those python scripts.
+
+## Current python scripts:
+-----------------------
+
+### Pure molecular scattering sky (Rayleigh)
+--------------------------------------------
+
+- simulate_transparency_LSST_noAbsorption.py
+
+### Pure molecular absorbing sky
+--------------------------------------------
+
+- simulate_transparency_LSST_noScattering_absoz.py
+- simulate_transparency_LSST_noScattering_abspwv.py
+
+
+### Molecular scattering and absorbing sky, no aerosols
+-------------------------------------------------------
+- simulate_transparency_LSST_ScattAbs_absoz.py
+- simulate_transparency_LSST_ScattAbs_abspwv.py
+
+tool class : UVspec.py
+
+
+## Old_pyscripts : directory containing the old version of those python scripts.
 -------------

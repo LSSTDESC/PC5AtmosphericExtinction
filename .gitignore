@@ -4,4 +4,7 @@
 *.out
 *.tdo
 *.synctex.gz
+*.ipynb_checkpoints/
+*.pyc
+*randomseed
 

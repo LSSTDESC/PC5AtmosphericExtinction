@@ -2,7 +2,7 @@
 #
 # Script to simulate air transparency with LibRadTran
 # With a pure absorbing atmosphere
-#
+# Here we vary PWV
 # author: sylvielsstfr
 # creation date : November 1st 2016
 # 
@@ -180,7 +180,7 @@ if __name__ == "__main__":
                 # airmass
                 airmass=float(amfileindex)/10.
             
-                print amfileindex
+        
             
                 BaseFilename=BaseFilename_part1+atmkey+'_'+Proc+'_'+Mod+'_z'+str(amfileindex)+'_'+WVXX+str(wvfileindex)                   
                     

@@ -65,7 +65,7 @@ It must be noticed that every light interaction process may not be defined over 
 
 \subsection{LSST site}
 %-----------------------------
-\todo[inline]{{\bf Altitude :} $h=2.680$~km.}
+\todo[inline]{{\bf Altitude :} $h=2.75$~km.}
 
 \subsection{Zenith angle}
 %---------------------------------
@@ -262,6 +262,8 @@ Aerosols2     & $\alpha$  &  17 & $[0,4]$ & 0.25 &  \\ \hline
 }
 \end{table}
 
+
+
 \subsection{Counting the files}
 
 \subsubsection{Pure molecular scattering files (Rayleigh)}
@@ -366,14 +368,22 @@ Each leaf directory provides the set of simulated files of varying $z$ and $pwv$
  rootdir/RT/VXX/LS/pp/us/ab/rep/oz/ & pure molecular absorption for varying $oz$ \\
  rootdir/RT/VXX/LS/pp/us/sa/rep/pwv/ & molecular absorption and scattering for varying $pwv$ \\
  rootdir/RT/VXX/LS/pp/us/sa/rep/oz/ & molecular absorption scattering for varying $oz$ \\
- rootdir/RT/VXX/LS/pp/us/sc/ae/ & pure molecular scattering and aerosols scattering \\
- rootdir/RT/VXX/LS/pp/us/sa/rep/ae/ & molecular absorption scattering and aerosols scattering \\
+ rootdir/RT/VXX/LS/pp/us/sc/ae/ & pure molecular scattering and default aerosols scattering \\
+ rootdir/RT/VXX/LS/pp/us/sa/rep/ae/ & molecular absorption scattering and default aerosols scattering \\
+ rootdir/RT/VXX/LS/pp/us/sc/as/ & pure molecular scattering and special aerosols scattering \\
+ rootdir/RT/VXX/LS/pp/us/sa/rep/as/ & molecular absorption scattering and special aerosols scattering \\
 \end{tabular}
 }
 \end{table}
 $VXX$ is the version number of Radtrran or Modtran.
+Special aerosols scattering means not standard. The exact definition will be provided.
 
 In a leaf directory, interpolation of spectra in $z$ and either $pwv$ or $oz$ is possible.
+Notice that under the above directories, it is proposed to keep input configuration parameter and output results in parallel directories~:
+\begin{verbatim}
+in/ : input files for configuration
+out/: files results of the simulation
+\end{verbatim} 
 
 
 \newpage

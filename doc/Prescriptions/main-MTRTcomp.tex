@@ -179,14 +179,16 @@ In the LibRadtran documentation, such models are referred as~:
 \item {\bf Spectrally resolved  calculation},
 \item {\bf Line-by-line calculation},
 \item {\bf The correlated-k method},(Kato and Kato2),
+\item {\bf The correlated-k method},(Fu and Liou),
 \item {\bf Representative wavelengths parameterization (REPTRAN)},
 \item {\bf Pseudo-spectral calculation adapted from LOWTRAN}. 
+\item {\bf CRS: switching off spectral parameterization}. 
 \end{itemize} 
 
 Probably, there is no need for perfectly well resolved lines calculations (which consumes much simulation time) for LSST broad band photometric measurements.
-We suggest to simulate only the "correlated-k method", the "Representative wavelengths parameterization" and the "Pseudo-spectral calculation".
+We suggest to simulate only the "correlated-k method", the "Representative wavelengths parameterization" and the "Pseudo-spectral calculation"~\footnote{For the moment, I can generate absorption spectra with REPTRAN, LOWTRAN and CRS. Apparently CRS parameterize only ozone. }
 
-\molabsmodel[inline]{{\bf Absorption models~:} 1) REPTRAN, 2) LOWTRAN, 3) KATO2, 4) KATO}
+\molabsmodel[inline]{{\bf Absorption models~:} 1) REPTRAN, 2) LOWTRAN,  3) CRS, 4) Fu 5) KATO,  6) KATO2,  7) KATO2.96 }
 
 
 \subsection{Variable component specifications}
@@ -247,12 +249,12 @@ The list of the settings for the simulations are listed below~:
 \begin{table}[h]
 {\small
 \begin{tabular} {|l|l|r|c|r|l|}  \hline\hline
-Number of & Variable name & Number & Range & Step & Comment \\ \hline\hline
+Number of & Name & Nb. & Range & Step & Comment \\ \hline\hline
 Airmass    &   $z$                 &     31     & $[1,3]$ & 0.1   & Check PP wrt PS \\
 Solvers     & $rte$             &       2      & $(PP,PS)$ &    &  Radiative transfer Eq. \\
 Atmosphere &  $atm$       &     2        &  $(us,sw)$ &   &  out of 6 standards def.\\
 Light inter. procs    &  $procs$    &   4          & $(mol\_scatt,mol\_abs,mol\_all)$ & & no aerosols \\
-Abs Models  & $amod$  & 4 & $(rept,lowt,kato2,kato)$ & &  \\
+Abs Models  & $amod$  & 4 & $(rept,lowt,crs,fu,kato2,kato)$ & &  \\
 Water vapor  & $pwv$    & 31 & $[0,15]$ & 0.5  & $O_3$ set to 300 Dobson \\
 Ozone        & $O_3$      & 21  & $[200,600]$ & 20 & $pwv$ set to 3~mm \\ \hline
 Aerosols1     &  $\tau_0$  & 51  & $[0,0.5]$   & 0.01 &  \\
@@ -339,7 +341,7 @@ We can propose a file naming convention accounting for the selected parameters f
 \item [{\bf \{rte\} :}] {\bf pp} or  {\bf ps},
 \item [{\bf \{atm\} :}]  {\bf us} or {\bf sw},
 \item [{\bf \{proc\} :}] {\bf sc} for pure molecular scattering, {\bf ab} for pure molecular absorption, {\bf sa} for the combination of molecular scattering and absorption,
-\item [{\bf \{mod\} :}] {\bf rt} for Reptran model, {\bf lt} for Lowtran model, {\bf k2} for Kato2 model, and {\bf kt} for Kato model.
+\item [{\bf \{mod\} :}] {\bf rt} for Reptran model, {\bf lt} for Lowtran model, {\bf cr} for CRS model,  {\bf fu} for the Fu and Liou model, {\bf k2} for Kato2 model, and {\bf kt} for Kato model.
 \item [{\bf zXX :} ] Airmass $z$, where XX is the value of the airmass on 2 digit $XX=2\times z$,
 \item [{\bf wvXX :} ] Precipitable water vapour $pwv$, where XX is the value of the $pwv$ on 3 digit $XXX=10\times pwv$, $pwv$ in mm unit,
 \item [{\bf ozXX :} ] Ozone $oz$, where XX is the value of the $oz$ on 2 digit $XX=oz/10$, $oz$ is Dobson unit.
@@ -364,14 +366,14 @@ Each leaf directory provides the set of simulated files of varying $z$ and $pwv$
 \begin{tabular}{ l l}
   rootdir &  top directory \\
  rootdir/RT/VXX/LS/pp/us/sc/ & pure molecular scattering \\
- rootdir/RT/VXX/LS/pp/us/ab/rep/pwv/ & pure molecular absorption for varying $pwv$ \\
- rootdir/RT/VXX/LS/pp/us/ab/rep/oz/ & pure molecular absorption for varying $oz$ \\
- rootdir/RT/VXX/LS/pp/us/sa/rep/pwv/ & molecular absorption and scattering for varying $pwv$ \\
- rootdir/RT/VXX/LS/pp/us/sa/rep/oz/ & molecular absorption scattering for varying $oz$ \\
+ rootdir/RT/VXX/LS/pp/us/ab/rt/wv/ & pure molecular absorption for varying $pwv$ \\
+ rootdir/RT/VXX/LS/pp/us/ab/rt/oz/ & pure molecular absorption for varying $oz$ \\
+ rootdir/RT/VXX/LS/pp/us/sa/rt/wv/ & molecular absorption and scattering for varying $pwv$ \\
+ rootdir/RT/VXX/LS/pp/us/sa/rt/oz/ & molecular absorption scattering for varying $oz$ \\
  rootdir/RT/VXX/LS/pp/us/sc/ae/ & pure molecular scattering and default aerosols scattering \\
- rootdir/RT/VXX/LS/pp/us/sa/rep/ae/ & molecular absorption scattering and default aerosols scattering \\
+ rootdir/RT/VXX/LS/pp/us/sa/rt/ae/ & molecular absorption scattering and default aerosols scattering \\
  rootdir/RT/VXX/LS/pp/us/sc/as/ & pure molecular scattering and special aerosols scattering \\
- rootdir/RT/VXX/LS/pp/us/sa/rep/as/ & molecular absorption scattering and special aerosols scattering \\
+ rootdir/RT/VXX/LS/pp/us/sa/rt/as/ & molecular absorption scattering and special aerosols scattering \\
 \end{tabular}
 }
 \end{table}

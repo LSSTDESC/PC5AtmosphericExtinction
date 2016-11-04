@@ -35,7 +35,7 @@ Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
 Atm=['us','sw']   # short name of atmospheric sky here US standard and  Subarctic winter
 Proc='ab'  # light interaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
-Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
+Mod='cr'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
 WVXX='wv'      # XX index for PWV       :   XX=int(pwv*10)
 OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
 
     # Set up type of run
-    runtype='no_absorption' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
+    runtype='no_scattering' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
     if Proc == 'sc':
         runtype='no_absorption'
         outtext='no_absorption'
@@ -119,6 +119,22 @@ if __name__ == "__main__":
     molmodel='reptran'
     if Mod == 'rt':
         molmodel='reptran'
+    if Mod == 'lt':
+        molmodel='lowtran'
+    if Mod == 'kt':
+        molmodel='kato'
+    if Mod == 'k2':
+        molmodel='kato2'
+    if Mod == 'fu':
+        molmodel='fu'    
+    if Mod == 'cr':
+        molmodel='crs'     
+        
+        
+        
+        
+        
+        
     	  
     # for simulation select only two atmosphere   
     #theatmospheres = np.array(['afglus','afglms','afglmw','afglt','afglss','afglsw'])
@@ -195,9 +211,11 @@ if __name__ == "__main__":
             
                 uvspec.inp["rte_solver"] = rte_eq
             
-            
-                uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol 
-
+                if Mod == 'rt':
+                    uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol
+                else:
+                    uvspec.inp["mol_abs_param"] = molmodel
+                    
                 # Convert airmass into zenith angle 
                 am=airmass
                 sza=math.acos(1./am)*180./math.pi

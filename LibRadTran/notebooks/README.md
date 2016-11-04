@@ -11,6 +11,7 @@ Packages required:
 - matplotlib
 - astropy
 
+These notebooks are only for output control
 
 Directory templates: 
 -------------------
@@ -26,8 +27,20 @@ View air transparencies for pure scattering sky:
 
 View air transparencies for pure absorbing sky:
 ----------------------------------------------
+for several absorption models rt: reptran, lt:lowtran, cr: for crs
+
+Old notebooks:
 - vary ozone : simulate_transparency_LSST_noScattering_absoz.py
 - vary water vapor :simulate_transparency_LSST_noScattering_abspwv.py
+
+New notebooks:
+- Show_RT_LS_pp_ab_rt_oz.ipynb
+- Show_RT_LS_pp_ab_rt_wv.ipynb
+- Show_RT_LS_pp_ab_cr_oz.ipynb
+- Show_RT_LS_pp_ab_cr_wv.ipynb		
+- Show_RT_LS_pp_ab_lt_oz.ipynb		
+- Show_RT_LS_pp_ab_lt_wv.ipynb
+
 
 
 View air transparencies for scattering and absorbing sky:

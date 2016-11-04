@@ -24,6 +24,7 @@ On my local MacOSX:
 
 On remote linux server:
 - simulateRT_2_0_transparency_LSST_noScattering_absoz.py 
+- simulateRT_2_0_transparency_LSST_noScattering_abspwv.py
 
 
 ### Molecular scattering and absorbing sky, no aerosols

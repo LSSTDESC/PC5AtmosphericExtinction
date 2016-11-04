@@ -1,10 +1,19 @@
+# .gitingore file : specify by default which files should not be
+# written into git, except if one want to force explicitely to save them.
 *~
+# remove unusefull latex files
 *.aux
 *.log
-*.out
 *.tdo
 *.synctex.gz
+# remouve unnecessary python files
 *.ipynb_checkpoints/
 *.pyc
 *randomseed
+# remove librandtran input and out files 
+# in order to force the git add explicitely
+# git add -f *.inp and git add -f *.out
+*.out
+*.inp
+
 

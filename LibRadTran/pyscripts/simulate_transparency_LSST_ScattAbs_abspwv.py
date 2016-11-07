@@ -35,7 +35,7 @@ Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
 Atm=['us','sw']   # short name of atmospheric sky here US standard and  Subarctic winter
 Proc='sa'  # light interaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
-Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
+Mod='lt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
 WVXX='wv'      # XX index for PWV       :   XX=int(pwv*10)
 OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
@@ -113,12 +113,24 @@ if __name__ == "__main__":
     elif Rte=='ps':   # pseudo spherical
         rte_eq='sdisort'
         
-        
-
+ 
 #   Selection of absorption model 
     molmodel='reptran'
     if Mod == 'rt':
         molmodel='reptran'
+    if Mod == 'lt':
+        molmodel='lowtran'
+    if Mod == 'kt':
+        molmodel='kato'
+    if Mod == 'k2':
+        molmodel='kato2'
+    if Mod == 'fu':
+        molmodel='fu'    
+    if Mod == 'cr':
+        molmodel='crs'     
+               
+
+
     	  
     # for simulation select only two atmosphere   
     #theatmospheres = np.array(['afglus','afglms','afglmw','afglt','afglss','afglsw'])
@@ -196,7 +208,11 @@ if __name__ == "__main__":
                 uvspec.inp["rte_solver"] = rte_eq
             
             
-                uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol 
+                
+                if Mod == 'rt':
+                    uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol
+                else:
+                    uvspec.inp["mol_abs_param"] = molmodel
 
                 # Convert airmass into zenith angle 
                 am=airmass

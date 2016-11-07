@@ -1,0 +1,14 @@
+albedo 0.2
+altitude 2.75
+atmosphere_file /Users/dagoret-campagnesylvie/MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/data/atmmod/afglus.dat
+data_files_path /Users/dagoret-campagnesylvie/MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/data
+mol_abs_param lowtran
+mol_modify H2O 11.5 MM
+output_quantity reflectivity
+output_user lambda edir
+phi0 0
+quiet 
+rte_solver disort
+source solar /Users/dagoret-campagnesylvie/MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/data/solar_flux/kurudz_1.0nm.dat
+sza 44.4153085972
+wavelength 250.0 1200.0

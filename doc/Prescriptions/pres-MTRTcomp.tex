@@ -17,6 +17,8 @@
 
 \documentclass{beamer}
 
+\usepackage{hyperref}
+
 \mode<presentation> {
 
 % The Beamer class comes with a number of default slide themes
@@ -92,6 +94,8 @@ Dagoret-Campagne, Sylvie  ,  LAL, % Your name
 \and
 Gilmore, David Kirk , SLAC,
 \textit{dkg@slac.stanford.edu} % Your email address
+\and
+For DESC-LSST Team
 }
 
 \date{\today} % Date, can be changed to a custom date
@@ -366,6 +370,34 @@ where $pwv=3$~mm and $oz=300$~Dobson unit.
 \end{table}
 $VXX$ is the version number of Radtrran or Modtran.
 \end{frame}
+
+
+%---------------------------------------------------------------------
+% Slide 11
+%---------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Status of the work}
+{\tiny
+\begin{itemize}
+\item GitHub Repository created by Nicolas at \\
+ \href{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction}{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction}
+\item Prescription note written to proceed with air transparency simulations and posted at \\
+ \href{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction/tree/master/doc/Prescriptions}{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction/tree/master/doc/Prescriptions}
+\item Simulation with LibRadTran {\bf done} and at posted at (see README) \\
+\href{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction/tree/master/LibRadTran/simulations}{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction/tree/master/LibRadTran/simulations}
+\item Simulation with Modtran {\bf soon performed} and at posted at (see README) \\
+\href{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction/tree/master/ModTran}{https://github.com/DarkEnergyScienceCollaboration/PC5AtmosphericExtinction/tree/master/ModTran}
+\end{itemize}
+}
+
+\begin{itemize}
+\item Ready for Atmospheric properties Analysis,
+\item Almost ready for comparison, at least comparing the different models inside LibRadTran.
+\end{itemize}
+
+\end{frame}
+
 
 
 

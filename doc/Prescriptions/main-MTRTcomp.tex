@@ -86,6 +86,8 @@ Because we want to compare calculations at high airmass, we have to compare calc
 The we recommends to select two Radiative Transfer Equation (RTE) solvers~:
 \rtealgo[inline]{{\bf Two RTE solvers~:} "$disort$" for Parallel Plane approximation and "$sdisort$" for Pseudo-Spherical correction. } 
 
+\textcolor{gray}{It is possible that only the RTE solver "disort" is available in Modtran. In a first stage, we focus on a Parallel Plane and disort comparison.}
+
 
 \section{Atmospheric models}
 %-------------------------------------
@@ -116,6 +118,9 @@ the standard US atmosphere and also the subarctic winter the driest  climate whi
 The US atmosphere is shown as the black line in figure~\ref{fig:rt_atmprof} and ~\ref{fig:rt_atm_densities}. 
 This US atmosphere is a good choice because it is not a extreme case. 
 Really it can be considered as an average of all other atmospheric models. It shows an average PWV at ground and also an average Temperature at the  20-25~km altitude.
+
+\textcolor{gray}{The above atmospheric models are both available in Modtran(Data Card : Card1.MODEL )  and LibRadTran (Data Card : atmosphere\_file.)}
+
 
 \section{Comparison of Rayleigh Scattering}
 %-------------------------------------------------------
@@ -156,6 +161,8 @@ Thus $C$ values are expected to be very similar within the computer errors.
 
 \molscatprocess[inline]{{\bf Pure molecular scattering~:} Simulate a pure molecular scattering atmosphere for pre-selected airmass and climate, without absorbing component and without aerosols.}
 
+\textcolor{gray}{It is not sure it is possible to switch on only molecular scattering and switching off molecular absorption in Modtran.}
+
 \section{Comparison of Absorption predictions}
 %------------------------------------------------------------
 
@@ -174,6 +181,8 @@ Because bands consist in tens of thousand lines that may overlap, it is usually 
 Instead one has to select different kinds of models which implement absorption in the bands.
 These models are probably implemented both in Modtran an LibRadtran as well. However, those models implementation need to be compared.
 
+\subsubsection{Absorption models in LibRadTran :}
+
 In the LibRadtran documentation, such models are referred as~:
 \begin{itemize}
 \item {\bf Spectrally resolved  calculation},
@@ -185,11 +194,32 @@ In the LibRadtran documentation, such models are referred as~:
 \item {\bf CRS: switching off spectral parameterization}. 
 \end{itemize} 
 
-Probably, there is no need for perfectly well resolved lines calculations (which consumes much simulation time) for LSST broad band photometric measurements.
-We suggest to simulate only the "correlated-k method", the "Representative wavelengths parameterization" and the "Pseudo-spectral calculation"~\footnote{For the moment, I can generate absorption spectra with REPTRAN, LOWTRAN and CRS. Apparently CRS parameterize only ozone. }
+\textcolor{gray}{Probably, there is no need for perfectly well resolved lines calculations (which consumes much simulation time) for LSST broad band photometric measurements.
+We suggest to simulate only the "correlated-k method", the "Representative wavelengths parameterization" and the "Pseudo-spectral calculation"~\footnote{For the moment, I can generate absorption spectra with REPTRAN, LOWTRAN and CRS. Apparently CRS parameterize only ozone. }}
 
-\molabsmodel[inline]{{\bf Absorption models~:} 1) REPTRAN, 2) LOWTRAN,  3) CRS, 4) Fu 5) KATO,  6) KATO2,  7) KATO2.96 }
+\molabsmodel[inline]{{\bf Absorption models in LibRadTran~:} 1) REPTRAN, 2) LOWTRAN,  3) CRS, 4) Fu 5) KATO,  6) KATO2,  7) KATO2.96 }
 
+\textcolor{gray}{The Data card for specifying the absorption model in LibRadTran is  \textit{mol\_abs\_param} . One should provides the values \textit{reptran fine} or  \textit{reptran medium}, \textit{reptran coarse} or \textit{lowtran},...}
+
+
+
+\subsubsection{Absorption models in Modtran:}
+%-----------------------------------------------------------
+In ModTran, the absorption models are refered as~:
+\begin{itemize}
+\item {\bf Band models methods}, The Modtran or Lowtran models,
+\item {\bf The correlated-k method}, The Modtran and Lowtran either in slow or medium modes.
+\end{itemize} 
+
+\molabsmodel[inline]{{\bf Absorption models in Modtran~:} 1) MODTRAN band Model, 2) LOWTRAN Band Model ,  3) MODTRAN correlated-k  and slow speed,  4) MODTRAN correlated-k  and slow speed, 5) MODTRAN correlated-k  and medium speed.}
+
+\textcolor{gray}{The Data card for specifying the absorption model in Modtran is  \textit{CARD1 MODTRN } . One should provides the values \textit{T,M,C,K,F,L} and \textit{CARD1 SPEED} is \textit{S} or blank. }
+
+
+
+\subsubsection{Summary on Models comparison}
+Probably we should compare the standard absorption model REPTRAN of LibRadTran (available in FINE, MEDIUM and COARSE modes) to the MODTRAN model in Band and correlated-k calculations provided by Modtran program on the one side and compare LOWTRAN in LibRadTran to LOWTRAN in band model as well as correlated-k calculation provided by Modtran.
+The question remains: can we switch off the molecular scattering is Modtran program to focus only to absorption features.
 
 \subsection{Variable component specifications}
 
@@ -210,15 +240,41 @@ We can vary the $H_2O$ pwv in a wide range of values as shown on figure~\ref{ig:
 \caption{\label{fig:ew}Simulation of absorption by PWV for PWV ranging from $0.1, 0.2,0.3, \cdots 9,8,9.910$~mm.}
 \end{figure}
 
-\molabscompo[inline]{ {\bf $H_2O$ PWV : }Generate Modtran/LibRadtran absorption profiles  for 31 points $pwv$ $\in \left[0~{\rm mm},15~{\rm mm} \right]$ in steps of 0.5~mm (and fix $O_3$ to 300 Dobson unit).}
+\molabscompo[inline]{ {\bf $H_2O$ PWV : }Generate Modtran/LibRadtran absorption profiles  for 31 points $pwv$ $\in \left[0~{\rm mm},15~{\rm mm} \right]$ in steps of 0.5~mm.}
 
 
+\paragraph{Data card for Precipitable Water Vapour in LibRadTran:}
+
+\textcolor{gray}{
+Typically to overwrite the default Precipitable Water Vapour of the atmospheric model, one should specify the following Data Card in LibTadTran~:
+\textit{mol\_modify  H2O   XX mm}, where $XX$ is the column depth of precipitable water in millimeters.
+}
+
+
+\paragraph{Data card for Precipitable Water Vapour in Modtran:}
+\textcolor{gray}{
+Typically to overwrite the default Precipitable Water Vapour of the atmospheric model, one should specify the following Data Card in ModTran~:
+\textit{CARD1A H2OSTR  XX}, where $XX$ is the column depth of precipitable water in g/cm$^2$.
+}
 
 \subsubsection{Ozone}
 %----------------------------
 
 Again we can vary the amount of Ozone in the atmosphere we have selected~:
-\molabscompo[inline]{ {\bf $O_3$ absorption bands} : Generate Modtran/LibRadtran absorption profiles in grids of 21 points $O_3$ $\in \left[200~{\rm Dobson},600~{\rm Dobson} \right]$ (and fix pwv to 3~mm).}
+\molabscompo[inline]{ {\bf $O_3$ absorption bands} : Generate Modtran/LibRadtran absorption profiles in grids of 21 points $O_3$ $\in \left[200~{\rm Dobson},600~{\rm Dobson} \right]$ .}
+
+\paragraph{Data card for Ozone in LibRadTran:}
+
+\textcolor{gray}{
+Typically to overwrite the default Precipitable Water Vapour of the atmospheric model, one should specify the following Data Card in LibTadTran~:
+\textit{mol\_modify  O3   XX DU}, where $XX$ is the column depth of Ozone in Dobson Units.
+}
+
+\paragraph{Data card for Ozone in Modtran:}
+\textcolor{gray}{
+Typically to overwrite the default Precipitable Water Vapour of the atmospheric model, one should specify the following Data Card in ModTran~:
+\textit{CARD1A O3STR  XX}, where $XX$ is the column depth of Ozone in g/cm$^2$.
+}
 
 
 \section{Combination of scattering and absorption}
@@ -226,6 +282,8 @@ Again we can vary the amount of Ozone in the atmosphere we have selected~:
 We have to combine the molecular scattering process with the molecular absorption processes.
 
 \allruns[inline]{{\bf Combined light interaction processes~:} simulate pure molecular scattering, pure molecular absorption, combined molecular scattering and absorption.}
+
+\textcolor{gray}{If the molecular scattering cannot be swithed off in Modtran, then this combination of scattering and absorption will be the only way to compare Modtran and LibRadTran.}
 
 
 \section{Comparison of Aerosols}
@@ -236,6 +294,8 @@ The simulation of aerosols may be done by specifying the Aerosol Optical Depth (
 \end{equation}
 
 \aerosols[inline]{{\bf Aerosols~:}  $\tau_0 \in [0, 0.5]$ in steps of 0.01,  $\alpha \in [0,4]$ in steps of 0.5, $\lambda_0=532$~nm. We suggest to simulate this with a pure molecular scattering atmosphere.}
+
+\todo[inline]{Aerosols, to be defined later.}
 
 \section{Summary}
 %------------------------
@@ -341,7 +401,8 @@ We can propose a file naming convention accounting for the selected parameters f
 \item [{\bf \{rte\} :}] {\bf pp} or  {\bf ps},
 \item [{\bf \{atm\} :}]  {\bf us} or {\bf sw},
 \item [{\bf \{proc\} :}] {\bf sc} for pure molecular scattering, {\bf ab} for pure molecular absorption, {\bf sa} for the combination of molecular scattering and absorption,
-\item [{\bf \{mod\} :}] {\bf rt} for Reptran model, {\bf lt} for Lowtran model, {\bf cr} for CRS model,  {\bf fu} for the Fu and Liou model, {\bf k2} for Kato2 model, and {\bf kt} for Kato model.
+\item [{\bf \{mod\} in LibRadTran :}] {\bf rt} for Reptran model, {\bf lt} for Lowtran model, {\bf cr} for CRS model,  {\bf fu} for the Fu and Liou model, {\bf k2} for Kato2 model, and {\bf kt} for Kato model.
+\item [{\bf \{mod\} in ModTran :}] {\bf mt} for Modtran band model, {\bf mk} for Modtran correlated-k model, {\bf lt} for Lowtran model.
 \item [{\bf zXX :} ] Airmass $z$, where XX is the value of the airmass on 2 digit $XX=2\times z$,
 \item [{\bf wvXX :} ] Precipitable water vapour $pwv$, where XX is the value of the $pwv$ on 3 digit $XXX=10\times pwv$, $pwv$ in mm unit,
 \item [{\bf ozXX :} ] Ozone $oz$, where XX is the value of the $oz$ on 2 digit $XX=oz/10$, $oz$ is Dobson unit.
@@ -354,6 +415,24 @@ For example a filename for LibRadtran, for LSST could be~:
 RT\_LS\_pp\_us\_sa\_rt\_z15\_wv030\_oz30.txt  \nonumber
 \end{equation}
 where $pwv=3$~mm and $oz=300$~Dobson unit and $z=1.5$.
+
+A more accurate definition of ${mod}$ in ModTran could be~:
+\begin{itemize}
+\item [{\bf \{mod\} :}] in ModTran : 
+\begin{itemize}
+ \item {\bf mt} for Modtran band model (\textcolor{gray}{CARD1.MODTRN='T'}), 
+ \item {\bf mm} for Modtran band model (\textcolor{gray}{CARD1.MODTRN='M'}),, 
+ \item {\bf lt} for Lowtran band model (\textcolor{gray}{CARD1.MODTRN='L' or 'F'}), 
+ \item {\bf mks} for Modtran correlate-k in slow mode (speed), (\textcolor{gray}{CARD1.MODTRN='K' or 'C and CARD1.SEED='S'}), 
+ \item {\bf mkm} for Modtran correlate-k in medium mode (speed), (\textcolor{gray}{CARD1.MODTRN='K' or 'C and CARD1.SEED='M'}),
+ \end{itemize}
+\end{itemize}
+
+For example a filename for Modtran, for LSST could be~:
+\begin{equation}
+MT\_LS\_pp\_us\_sa\_mt\_z15\_wv030\_oz30.txt  \nonumber
+\end{equation}
+where $pwv=3$~mm and $oz=300$~Dobson unit\footnote{In Modtran Dobson Unit Ozone has to be given in $g/cm^2$. Thus Dobson Unit has to be converted into equivalent $g/cm^2$ units.} and $z=1.5$.
 
 
 \section{Files organisation}

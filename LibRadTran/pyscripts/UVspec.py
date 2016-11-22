@@ -17,7 +17,10 @@ class UVspec:
     def write_input(self, fn):
         f = open(fn,'w')
         for key in sorted(self.inp):
-            f.write( key + ' ' + str(self.inp[key]) + '\n')
+            if key=="mol_modify2":
+                f.write( "mol_modify" + ' ' + str(self.inp[key]) + '\n')
+            else:
+                f.write( key + ' ' + str(self.inp[key]) + '\n')
             
         f.close()
 

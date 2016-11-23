@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
 
     # Set up type of run
-    runtype='no_scattering' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
+    runtype='clearsky' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
     if Proc == 'sc':
         runtype='no_absorption'
         outtext='no_absorption'

@@ -1,0 +1,1 @@
+python simulate_transparency_withaerosols.py >& verbose.txt

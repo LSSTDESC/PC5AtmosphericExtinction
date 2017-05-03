@@ -4,7 +4,8 @@
 # With a pure absorbing atmosphere
 # Here we vary PWV
 # author: sylvielsstfr
-# creation date : May 2nd 2017
+# creation date : May  3rd 2017
+# update May 2017
 # 
 #
 #################################################################
@@ -25,7 +26,8 @@ import UVspec
 # LibRadTran installation directory
 home = os.environ['HOME']+'/'       
 #libradtranpath = home+'MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/'
-libradtranpath = home+'MacOsX/LSST/softs/libRadtran-2.0.1/'
+libradtranpath=home+'MacOsX/LSST/softs/libRadtran-2.0.1/'
+
 
 # Filename : RT_LS_pp_us_sa_rt_z15_wv030_oz30.txt
 #          : Prog_Obs_Rte_Atm_proc_Mod_zXX_wv_XX_oz_XX
@@ -33,8 +35,8 @@ libradtranpath = home+'MacOsX/LSST/softs/libRadtran-2.0.1/'
 Prog='RT'  #definition the simulation programm is libRadTran
 Obs='OH'   # definition of observatory site (LS,CT,OH,MK,...)
 Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
-Atm=['ms']   # short name of atmospheric sky here US standard and  Subarctic winter
-Proc='sa'  # light interaction processes : sc for pure scattering,ab for pure absorption
+Atm=['us','mw','ms']   # short name of atmospheric sky here US standard and  Subarctic winter
+Proc='ab'  # light interaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
 Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
@@ -43,7 +45,7 @@ OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
 
 
 
-OHP_Altitude = 0.650  # in k meters from astropy package (Observatoire de Haute Provence)
+OHP_Altitude = 0.650  # in k meters from astropy package (Cerro Pachon)
 OBS_Altitude = str(OHP_Altitude)
 
 TOPDIR='../simulations/RT/2.0.1/OH'
@@ -88,7 +90,7 @@ if __name__ == "__main__":
 
 
     # Set up type of run
-    runtype='clearsky' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
+    runtype='no_absorption' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
     if Proc == 'sc':
         runtype='no_absorption'
         outtext='no_absorption'
@@ -114,24 +116,24 @@ if __name__ == "__main__":
     elif Rte=='ps':   # pseudo spherical
         rte_eq='sdisort'
         
- 
+        
+
 #   Selection of absorption model 
     molmodel='reptran'
     if Mod == 'rt':
         molmodel='reptran'
     if Mod == 'lt':
         molmodel='lowtran'
-    if Mod == 'kt':
-        molmodel='kato'
-    if Mod == 'k2':
-        molmodel='kato2'
+    if Mod == 'cr':
+        molmodel='crs'
+        
     if Mod == 'fu':
         molmodel='fu'    
-    if Mod == 'cr':
-        molmodel='crs'     
-               
-
-
+    if Mod == 'kt':
+        molmodel='kato'     
+    if Mod == 'kt2':
+        molmodel='kato2'         
+        
     	  
     # for simulation select only two atmosphere   
     #theatmospheres = np.array(['afglus','afglms','afglmw','afglt','afglss','afglsw'])
@@ -149,13 +151,6 @@ if __name__ == "__main__":
             theatmospheres.append('afglus')
         if re.search('sw',skyindex):
             theatmospheres.append('afglsw')
-        if re.search('ss',skyindex):
-            theatmospheres.append('afglss')
-        if re.search('ms',skyindex):
-            theatmospheres.append('afglms')
-        if re.search('mw',skyindex):
-            theatmospheres.append('afglmw')
-
             
    
    
@@ -215,10 +210,8 @@ if __name__ == "__main__":
             
                 uvspec.inp["rte_solver"] = rte_eq
             
-            
-                
                 if Mod == 'rt':
-                    uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol
+                    uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol 
                 else:
                     uvspec.inp["mol_abs_param"] = molmodel
 
@@ -230,7 +223,6 @@ if __name__ == "__main__":
                 if runtype=='aerosol_default':
                     uvspec.inp["aerosol_default"] = ''
                 elif runtype=='aerosol_special':
-                    uvspec.inp["aerosol_default"] = ''
                     uvspec.inp["aerosol_set_tau_at_wvl"] = '500 0.02'
                         
                 if runtype=='no_scattering':

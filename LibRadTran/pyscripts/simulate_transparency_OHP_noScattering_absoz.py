@@ -2,9 +2,9 @@
 #
 # Script to simulate air transparency with LibRadTran
 # With a pure absorbing atmosphere
-# Here we vary PWV
+#
 # author: sylvielsstfr
-# creation date : May 2nd 2017
+# creation date : May 3rd 2017
 # 
 #
 #################################################################
@@ -25,7 +25,7 @@ import UVspec
 # LibRadTran installation directory
 home = os.environ['HOME']+'/'       
 #libradtranpath = home+'MacOsX/LSST/softs/radtran-2.0/libRadtran-2.0/'
-libradtranpath = home+'MacOsX/LSST/softs/libRadtran-2.0.1/'
+libradtranpath=home+'MacOsX/LSST/softs/libRadtran-2.0.1/'
 
 # Filename : RT_LS_pp_us_sa_rt_z15_wv030_oz30.txt
 #          : Prog_Obs_Rte_Atm_proc_Mod_zXX_wv_XX_oz_XX
@@ -33,8 +33,8 @@ libradtranpath = home+'MacOsX/LSST/softs/libRadtran-2.0.1/'
 Prog='RT'  #definition the simulation programm is libRadTran
 Obs='OH'   # definition of observatory site (LS,CT,OH,MK,...)
 Rte='pp'   # pp for parallel plane of ps for pseudo-spherical
-Atm=['ms']   # short name of atmospheric sky here US standard and  Subarctic winter
-Proc='sa'  # light interaction processes : sc for pure scattering,ab for pure absorption
+Atm=['us','mw','ms']   # short name of atmospheric sky here US standard and  Subarctic winter
+Proc='ab'  # light interaction processes : sc for pure scattering,ab for pure absorption
            # sa for scattering and absorption, ae with aerosols default, as with aerosol special
 Mod='rt'   # Models for absorption bands : rt for REPTRAN, lt for LOWTRAN, k2 for Kato2
 ZXX='z'        # XX index for airmass z :   XX=int(10*z)
@@ -43,8 +43,8 @@ OZXX='oz'      # XX index for OZ        :   XX=int(oz/10)
 
 
 
-OHP_Altitude = 0.650  # in k meters from astropy package (Observatoire de Haute Provence)
-OBS_Altitude = str(OHP_Altitude)
+OHP_Altitude = 0.650  # in k meters from astropy package (Cerro Pachon)
+OBS_Altitude = str(LSST_Altitude)
 
 TOPDIR='../simulations/RT/2.0.1/OH'
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
 
     # Set up type of run
-    runtype='clearsky' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
+    runtype='no_scattering' #'no_scattering' #aerosol_special #aerosol_default# #'clearsky'#     
     if Proc == 'sc':
         runtype='no_absorption'
         outtext='no_absorption'
@@ -114,7 +114,8 @@ if __name__ == "__main__":
     elif Rte=='ps':   # pseudo spherical
         rte_eq='sdisort'
         
- 
+        
+
 #   Selection of absorption model 
     molmodel='reptran'
     if Mod == 'rt':
@@ -129,9 +130,12 @@ if __name__ == "__main__":
         molmodel='fu'    
     if Mod == 'cr':
         molmodel='crs'     
-               
-
-
+        
+        
+        
+        
+        
+        
     	  
     # for simulation select only two atmosphere   
     #theatmospheres = np.array(['afglus','afglms','afglmw','afglt','afglss','afglsw'])
@@ -149,13 +153,6 @@ if __name__ == "__main__":
             theatmospheres.append('afglus')
         if re.search('sw',skyindex):
             theatmospheres.append('afglsw')
-        if re.search('ss',skyindex):
-            theatmospheres.append('afglss')
-        if re.search('ms',skyindex):
-            theatmospheres.append('afglms')
-        if re.search('mw',skyindex):
-            theatmospheres.append('afglmw')
-
             
    
    
@@ -167,7 +164,7 @@ if __name__ == "__main__":
         atmkey=atmosphere_map[atmosphere]
        
         # manage input and output directories and vary the ozone
-        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmkey+'/'+Proc+'/'+Mod+'/'+WVXX
+        TOPDIR2=TOPDIR+'/'+Rte+'/'+atmkey+'/'+Proc+'/'+Mod+'/'+OZXX
         ensure_dir(TOPDIR2)
         INPUTDIR=TOPDIR2+'/'+'in'
         ensure_dir(INPUTDIR)
@@ -187,11 +184,11 @@ if __name__ == "__main__":
             else:
                 molresol ='fine'
            
-        # 2) LOOP on Precipitable Water Vapor levels
-        for index,wvfileindex in np.ndenumerate(pwv_indexes):   
+        # 2) LOOP on OZONE
+        for index,ozfileindex in np.ndenumerate(ozone_indexes):   
            
-           pwv_val=float(wvfileindex)/10.
-           pwv_str='H2O '+str(pwv_val)+ ' MM'
+           ozon_val=float(ozfileindex*10)
+           ozon_str='O3 '+str(ozon_val)+ ' DU'
            
            # 3) LOOP ON AIRMASSES 
            for index,amfileindex in np.ndenumerate(airmasses_indexes):
@@ -200,9 +197,9 @@ if __name__ == "__main__":
                 # airmass
                 airmass=float(amfileindex)/10.
             
-        
+                print amfileindex
             
-                BaseFilename=BaseFilename_part1+atmkey+'_'+Proc+'_'+Mod+'_z'+str(amfileindex)+'_'+WVXX+str(wvfileindex)                   
+                BaseFilename=BaseFilename_part1+atmkey+'_'+Proc+'_'+Mod+'_z'+str(amfileindex)+'_'+OZXX+str(ozfileindex)                   
                     
                 verbose=True
                 uvspec = UVspec.UVspec()
@@ -215,13 +212,11 @@ if __name__ == "__main__":
             
                 uvspec.inp["rte_solver"] = rte_eq
             
-            
-                
                 if Mod == 'rt':
                     uvspec.inp["mol_abs_param"] = molmodel + ' ' + molresol
                 else:
                     uvspec.inp["mol_abs_param"] = molmodel
-
+                    
                 # Convert airmass into zenith angle 
                 am=airmass
                 sza=math.acos(1./am)*180./math.pi
@@ -230,7 +225,6 @@ if __name__ == "__main__":
                 if runtype=='aerosol_default':
                     uvspec.inp["aerosol_default"] = ''
                 elif runtype=='aerosol_special':
-                    uvspec.inp["aerosol_default"] = ''
                     uvspec.inp["aerosol_set_tau_at_wvl"] = '500 0.02'
                         
                 if runtype=='no_scattering':
@@ -239,7 +233,7 @@ if __name__ == "__main__":
                     uvspec.inp["no_absorption"] = ''
      
                 # set up the ozone value               
-                uvspec.inp["mol_modify"] = pwv_str 
+                uvspec.inp["mol_modify"] = ozon_str 
                     
                 
                 uvspec.inp["output_user"] = 'lambda edir'
